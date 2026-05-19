@@ -3,14 +3,14 @@ package edu.masanz.da.en;
 public class Jugador {
 
     private String nombre;
-    private boolean esImpostor;
-    private boolean estaVivo;
+    private boolean impostor;
+    private boolean vivo;
     private Sala sala;
 
     public  Jugador(String nombre) {
         this.nombre = nombre;
-        this.esImpostor = false;
-        this.estaVivo = true;
+        this.impostor = false;
+        this.vivo = true;
     }
 
     public String getNombre() {
@@ -21,20 +21,20 @@ public class Jugador {
         this.nombre = nombre;
     }
 
-    public boolean isEsImpostor() {
-        return esImpostor;
+    public boolean isImpostor() {
+        return impostor;
     }
 
-    public void setEsImpostor(boolean esImpostor) {
-        this.esImpostor = esImpostor;
+    public void setImpostor(boolean impostor) {
+        this.impostor = impostor;
     }
 
-    public boolean isEstaVivo() {
-        return estaVivo;
+    public boolean isVivo() {
+        return vivo;
     }
 
-    public void setEstaVivo(boolean estaVivo) {
-        this.estaVivo = estaVivo;
+    public void setVivo(boolean vivo) {
+        this.vivo = vivo;
     }
 
     public Sala getSala() {

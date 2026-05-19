@@ -28,13 +28,12 @@ public class TxatClientHandler extends Thread {
             while (in.hasNextLine()) {
                 String message = in.nextLine();
                 System.out.printf("Mensaje recibido de %s> %s \n", clientName, message);
-                if (message.equals("WHO")) {
-                    listarConectados();
+
+                if (message.startsWith("/")) {
+                    processCommand(message);
                     continue;
                 }
-                if (message.equals("BYE")) {
-                    break;
-                }
+
                 broadcast(clientName + ": " + message);
             }
         } catch (IOException e) {
@@ -42,6 +41,44 @@ public class TxatClientHandler extends Thread {
         } finally {
             closeConnection();
         }
+    }
+
+    private void processCommand(String message) {
+        String cmd = message.split("\\s+")[0].substring(1);
+        switch (cmd) {
+            case "MAP":
+                sendMap();
+                break;
+            case "PWD":
+                sendWhereAmI();
+                break;
+            case "KILL":
+                break;
+            case "MOVE":
+                if (message.split("\\s+").length != 2) {
+                    break;
+                }
+                String par1 = message.split("\\s+")[1];
+                moveSala(par1);
+                break;
+        }
+    }
+
+    private void moveSala(String nombreSala) {
+        boolean b = GameManager.getInstance().move(clientName, nombreSala);
+        if (b) {
+            out.println("Ya estás en " + nombreSala);
+        }else{
+            out.println("No puedes ir a " + nombreSala);
+        }
+    }
+
+    private void sendWhereAmI() {
+        out.println(GameManager.getInstance().whereIsJugador(clientName));
+    }
+
+    private void sendMap() {
+        out.println(GameManager.getInstance().getMapaTextual());
     }
 
     private void registerClient(Scanner in) {
@@ -54,6 +91,9 @@ public class TxatClientHandler extends Thread {
                         mapClientsWriters.put(clientName, out);
                         System.out.println("Cliente " + clientName + " conectado.");
                         out.println("OK");
+
+                        GameManager.getInstance().addJugador(clientName);
+
                         break;
                     }else {
                         out.println("NOK");
